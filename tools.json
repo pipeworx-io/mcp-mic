@@ -1,0 +1,56 @@
+[
+  {
+    "name": "decode_mic",
+    "description": "Decode an ISO 10383 Market Identifier Code (MIC) — the 4-character venue code openfigi returns as `exchCode` on an exchange listing, and the code most market-data feeds use the same way — to the trading venue's own name, legal operator, country, city, website and registry status. Reports whether the code is an OPERATING MIC (the operator as a whole, e.g. \"XNYS\") or a SEGMENT MIC (one specific market under an operator, e.g. \"ARCX\" under \"XNYS\"); an operating MIC also carries segment_count — call search_mics with operating_mic to list them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "4-character ISO 10383 MIC, e.g. \"XNYS\" (NYSE) or \"XLON\" (London Stock Exchange)."
+        }
+      },
+      "required": [
+        "code"
+      ]
+    }
+  },
+  {
+    "name": "search_mics",
+    "description": "Filter the ISO 10383 Market Identifier Code registry by country, operating MIC, status and/or a name fragment. Returns aggregate counts first (total matched, by_status, by_country) and a page of rows after. Use operating_mic to list every segment market under one venue operator (e.g. every segment under \"XNYS\").",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code of the venue, e.g. \"US\", \"GB\", \"JP\"."
+        },
+        "operating_mic": {
+          "type": "string",
+          "description": "List every market (segment or operating) under this operating MIC, e.g. \"XNYS\" to list NYSE's own segments."
+        },
+        "status": {
+          "type": "string",
+          "description": "Registry status.",
+          "enum": [
+            "ACTIVE",
+            "UPDATED",
+            "EXPIRED"
+          ]
+        },
+        "name_contains": {
+          "type": "string",
+          "description": "Case-insensitive fragment of the market name, legal entity name or acronym, e.g. \"nasdaq\"."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Rows per page, 1-500 (default 50)."
+        },
+        "offset": {
+          "type": "number",
+          "description": "Rows to skip for paging (default 0)."
+        }
+      }
+    }
+  }
+]
